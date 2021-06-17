@@ -12,12 +12,12 @@ const useStepRouting = () => {
 	const userId = useUserId();
 	const setupWizardRoute = useRoute('setup-wizard');
 
+	const step = parseInt(param, 10);
 	const [currentStep, setCurrentStep] = useState(() => {
 		if (param === finalStep) {
 			return finalStep;
 		}
 
-		const step = parseInt(param, 10);
 		if (Number.isFinite(step) && step >= 1) {
 			return step;
 		}
@@ -32,8 +32,10 @@ const useStepRouting = () => {
 			setCurrentStep(2);
 		}
 
-		setupWizardRoute.replace({ step: String(currentStep) });
-	}, [setupWizardRoute, userId, currentStep]);
+		if (step !== currentStep && param !== currentStep) {
+			setupWizardRoute.replace({ step: String(currentStep) });
+		}
+	}, [setupWizardRoute, userId, currentStep, param, step]);
 
 	return [currentStep, setCurrentStep];
 };
